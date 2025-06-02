@@ -1,6 +1,19 @@
 (function executeRule(current, previous /*null when async*/) {
 
 	try {
+	// Check if "Additional comments" (comments field) changed
+    if (!current.comments.changes()) {
+        return; // No change, skip
+    }
+
+    // Get caller ID and current user ID
+    var callerId = current.caller_id.sys_id + '';
+    var currentUserId = gs.getUserID() + '';
+
+    // Only proceed if the updater is NOT the caller
+    if (callerId == currentUserId) {
+        return; // Caller made the comment, skip
+    }
         var user = current.caller_id;
         if (!user) return;
 
