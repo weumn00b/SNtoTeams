@@ -19,7 +19,7 @@
 
         var email = current.caller_id.email + '';
 		var incidentNumber = current.number + '';
-		var incidentLink = gs.getProperty("glide.servlet.uri") + "nav_to.do?uri=incident.do?sys_id=" + current.sys_id;
+		var incidentLink = gs.getProperty("glide.servlet.uri") + "sp?id=ticket&table=incident&sys_id" + current.sys_id;
 		var shortDescription = current.short_description + '';
 
         var payload = {
