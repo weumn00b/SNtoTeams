@@ -1,5 +1,5 @@
 (function executeRule(current, gContext) {
-    var endpoint = 'example.com';
+    var endpoint = 'link to endpoint';
 
     var gr = new GlideRecord('sysapproval_approver');
     gr.addQuery('state', 'requested'); // Only pending approvals
@@ -9,23 +9,34 @@
     
 	gr.query();
 
-    while (gr.next()) {
+//These Lines are for testing purposes
+	
+    //while (gr.next()) {
+//		if (gr.approver.getDisplayValue().toLowerCase() !== 'test test') {
+//			continue; // Skip non-matching users
+}
         var approver = gr.approver.getDisplayValue();
         var approverEmail = gr.approver.email;
         var approvalRecord = gr.sysapproval.getRefRecord();
-        var shortDesc = approvalRecord.short_description || '';
-        var requestedFor = approvalRecord.requested_for.getDisplayValue() || '';
+		var shortDesc = '';
+        var ritm = gr.sysapproval.getRefRecord(); // This will grab the RITM
+
+		var requestedFor = '';
+		if (ritm && ritm.getTableName() === 'sc_req_item') {
+			shortDesc = ritm.short_description || '';
+			if (ritm.requested_for)
+				requestedFor = ritm.requested_for.getDisplayValue();
+}
 
         
-        var taskSysId = gr.sysapproval.sys_id;
-        var approvalLink = gs.getProperty('glide.servlet.uri') + 'approval.do?sys_id=' + taskSysId;
+        var approvalLink = gs.getProperty('glide.servlet.uri') + 'sp?id=approval&sys_id=' + gr.sys_id;
 
         // Construct JSON payload
         var payload = {
-            approver_email: approverEmail,
-            short_description: shortDesc,
-            requested_for: requestedFor,
-            approval_link: approvalLink
+            approver_email: approverEmail + '',
+            short_description: shortDesc + '',
+            requested_for: requestedFor + '',
+            approval_link: approvalLink + ''
         };
 
         // Prepare REST message
@@ -44,4 +55,4 @@
             gs.error("Failed to send approval data: " + ex.message);
         }
     }
-})(current, gContext);
+})();
